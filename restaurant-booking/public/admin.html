@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Hệ Thống Quản Trị Trung Tâm Nhà Hàng</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+<body class="bg-gray-100 p-6 md:p-12 text-gray-800">
+    <div class="max-w-5xl mx-auto">
+        <div class="flex justify-between items-center mb-8 border-b pb-4 border-gray-200">
+            <div>
+                <h1 class="text-3xl font-black text-gray-900 tracking-tight">ADMIN DASHBOARD</h1>
+                <p class="text-xs text-gray-500 uppercase font-bold tracking-wider mt-1">Quản lý thực đơn & Bài viết tin tức (Đức - Anh - Việt)</p>
+            </div>
+            <a href="/" class="text-amber-700 font-bold hover:underline text-sm">&larr; Xem Trang Chủ</a>
+        </div>
+
+        <div class="flex space-x-4 mb-6">
+            <button onclick="changeTab('tab-dish')" id="btn-tab-dish" class="px-5 py-2.5 bg-gray-900 text-white font-bold rounded-lg text-xs uppercase tracking-wider cursor-pointer">🍔 Quản Lý Món Ăn</button>
+            <button onclick="changeTab('tab-post')" id="btn-tab-post" class="px-5 py-2.5 bg-gray-200 text-gray-700 font-bold rounded-lg text-xs uppercase tracking-wider cursor-pointer">📄 Quản Lý Bài Viết</button>
+        </div>
+
+        <div id="tab-dish" class="space-y-8">
+            <form id="addDishForm" class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 grid grid-cols-1 md:grid-cols-3 gap-4" enctype="multipart/form-data">
+                <div class="col-span-3"><h3 class="font-bold text-lg text-gray-900">➕ Thêm Món Ăn Mới Vào Thực Đơn</h3></div>
+                <div><label class="block text-xs font-bold mb-1">Tên món (VI)</label><input type="text" id="dish_name_vi" required class="w-full border p-2 rounded bg-gray-50"></div>
+                <div><label class="block text-xs font-bold mb-1">Tên món (EN)</label><input type="text" id="dish_name_en" required class="w-full border p-2 rounded bg-gray-50"></div>
+                <div><label class="block text-xs font-bold mb-1">Tên món (DE)</label><input type="text" id="dish_name_de" required class="w-full border p-2 rounded bg-gray-50"></div>
+                <div><label class="block text-xs font-bold mb-1">Mô tả (VI)</label><textarea id="dish_desc_vi" class="w-full border p-2 rounded bg-gray-50"></textarea></div>
+                <div><label class="block text-xs font-bold mb-1">Mô tả (EN)</label><textarea id="dish_desc_en" class="w-full border p-2 rounded bg-gray-50"></textarea></div>
+                <div><label class="block text-xs font-bold mb-1">Mô tả (DE)</label><textarea id="dish_desc_de" class="w-full border p-2 rounded bg-gray-50"></textarea></div>
+                <div><label class="block text-xs font-bold mb-1">Giá bán (€ hoặc VND)</label><input type="number" id="dish_price" required class="w-full border p-2 rounded bg-gray-50"></div>
+                <div>
+                    <label class="block text-xs font-bold mb-1">Phân mục thực đơn</label>
+                    <select id="dish_category" class="w-full border p-2 rounded bg-gray-50">
+                        <option value="vorspeisen">Khai vị (Vorspeisen)</option>
+                        <option value="hauptgerichte">Món chính (Hauptgerichte)</option>
+                        <option value="desserts">Tráng miệng (Desserts)</option>
+                    </select>
+                </div>
+                <div><label class="block text-xs font-bold mb-1">Hình ảnh món ăn</label><input type="file" id="dish_image" accept="image/*" required class="w-full text-xs"></div>
+                <div class="col-span-3 text-right"><button type="submit" class="bg-amber-700 text-white font-bold px-6 py-2.5 rounded-lg text-xs uppercase cursor-pointer">Lưu thực đơn</button></div>
+            </form>
+
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                <table class="w-full border-collapse text-left text-sm text-gray-500">
+                    <thead class="bg-gray-50 text-xs font-bold uppercase text-gray-700 border-b">
+                        <tr><th class="px-6 py-4">Hình Ảnh</th><th class="px-6 py-4">Tên Món Ăn</th><th class="px-6 py-4">Phân Mục</th><th class="px-6 py-4">Giá Tiền</th><th class="px-6 py-4 text-right">Hành Động</th></tr>
+                    </thead>
+                    <tbody id="dishTableBody" class="divide-y divide-gray-100"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="tab-post" class="hidden space-y-8">
+            <form id="addPostForm" class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="col-span-3"><h3 class="font-bold text-lg text-gray-900">➕ Đăng Bài Viết Tin Tức / Ưu Đãi Mới</h3></div>
+                <div><label class="block text-xs font-bold mb-1">Tiêu đề (VI)</label><input type="text" id="post_title_vi" required class="w-full border p-2 rounded bg-gray-50"></div>
+                <div><label class="block text-xs font-bold mb-1">Tiêu đề (EN)</label><input type="text" id="post_title_en" required class="w-full border p-2 rounded bg-gray-50"></div>
+                <div><label class="block text-xs font-bold mb-1">Tiêu đề (DE)</label><input type="text" id="post_title_de" required class="w-full border p-2 rounded bg-gray-50"></div>
+                <div><label class="block text-xs font-bold mb-1">Nội dung (VI)</label><textarea id="post_content_vi" rows="4" required class="w-full border p-2 rounded bg-gray-50"></textarea></div>
+                <div><label class="block text-xs font-bold mb-1">Nội dung (EN)</label><textarea id="post_content_en" rows="4" required class="w-full border p-2 rounded bg-gray-50"></textarea></div>
+                <div><label class="block text-xs font-bold mb-1">Nội dung (DE)</label><textarea id="post_content_de" rows="4" required class="w-full border p-2 rounded bg-gray-50"></textarea></div>
+                <div class="col-span-3 text-right"><button type="submit" class="bg-amber-700 text-white font-bold px-6 py-2.5 rounded-lg text-xs uppercase cursor-pointer">Xuất bản bài viết</button></div>
+            </form>
+
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                <table class="w-full border-collapse text-left text-sm text-gray-500">
+                    <thead class="bg-gray-50 text-xs font-bold uppercase text-gray-700 border-b">
+                        <tr><th class="px-6 py-4">Tiêu đề (Tiếng Việt)</th><th class="px-6 py-4">Tiêu đề (Tiếng Anh)</th><th class="px-6 py-4 text-right">Hành Động</th></tr>
+                    </thead>
+                    <tbody id="postTableBody" class="divide-y divide-gray-100"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function changeTab(tabId) {
+            document.getElementById('tab-dish').classList.add('hidden');
+            document.getElementById('tab-post').classList.add('hidden');
+            document.getElementById(tabId).classList.remove('hidden');
+
+            document.getElementById('btn-tab-dish').className = "px-5 py-2.5 bg-gray-200 text-gray-700 font-bold rounded-lg text-xs uppercase tracking-wider cursor-pointer";
+            document.getElementById('btn-tab-post').className = "px-5 py-2.5 bg-gray-200 text-gray-700 font-bold rounded-lg text-xs uppercase tracking-wider cursor-pointer";
+
+            if(tabId === 'tab-dish') {
+                document.getElementById('btn-tab-dish').className = "px-5 py-2.5 bg-gray-900 text-white font-bold rounded-lg text-xs uppercase tracking-wider cursor-pointer";
+            } else {
+                document.getElementById('btn-tab-post').className = "px-5 py-2.5 bg-gray-900 text-white font-bold rounded-lg text-xs uppercase tracking-wider cursor-pointer";
+            }
+        }
+
+        async function fetchDishes() {
+            const res = await fetch('/api/dishes');
+            const dishes = await res.json();
+            const tbody = document.getElementById('dishTableBody');
+            tbody.innerHTML = dishes.map(d => `
+                <tr class="hover:bg-gray-50 font-medium text-gray-900">
+                    <td class="px-6 py-4"><img src="${d.image}" class="w-12 h-12 object-cover rounded-lg border"></td>
+                    <td class="px-6 py-4"><div>${d.name_vi}</div><div class="text-xs text-gray-400 font-normal">${d.name_de}</div></td>
+                    <td class="px-6 py-4 text-xs font-bold uppercase">${d.category}</td>
+                    <td class="px-6 py-4 text-amber-700">${d.price.toLocaleString()}</td>
+                    <td class="px-6 py-4 text-right"><button onclick="deleteDish('${d._id}')" class="text-red-600 font-bold hover:underline text-xs cursor-pointer">Xóa bỏ</button></td>
+                </tr>
+            `).join('');
+        }
+
+        document.getElementById('addDishForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData();
+            formData.append('name_vi', document.getElementById('dish_name_vi').value);
+            formData.append('name_en', document.getElementById('dish_name_en').value);
+            formData.append('name_de', document.getElementById('dish_name_de').value);
+            formData.append('desc_vi', document.getElementById('dish_desc_vi').value);
+            formData.append('desc_en', document.getElementById('dish_desc_en').value);
+            formData.append('desc_de', document.getElementById('dish_desc_de').value);
+            formData.append('price', document.getElementById('dish_price').value);
+            formData.append('category', document.getElementById('dish_category').value);
+            formData.append('image', document.getElementById('dish_image').files[0]);
+
+            const res = await fetch('/api/admin/add-dish', { method: 'POST', body: formData });
+            const result = await res.json();
+            alert(result.message);
+            document.getElementById('addDishForm').reset();
+            fetchDishes();
+        });
+
+        async function deleteDish(id) {
+            if(confirm("Bạn muốn xóa món ăn này ra khỏi thực đơn?")) {
+                const res = await fetch(`/api/admin/delete-dish/${id}`, { method: 'DELETE' });
+                const r = await res.json();
+                alert(r.message);
+                fetchDishes();
+            }
+        }
+
+        async function fetchPosts() {
+            const res = await fetch('/api/posts');
+            const posts = await res.json();
+            const tbody = document.getElementById('postTableBody');
+            tbody.innerHTML = posts.map(p => `
+                <tr class="hover:bg-gray-50 font-medium text-gray-900">
+                    <td class="px-6 py-4">${p.title_vi}</td>
+                    <td class="px-6 py-4 text-gray-400 font-normal">${p.title_en}</td>
+                    <td class="px-6 py-4 text-right"><button onclick="deletePost('${p._id}')" class="text-red-600 font-bold hover:underline text-xs cursor-pointer">Gỡ bài</button></td>
+                </tr>
+            `).join('');
+        }
+
+        document.getElementById('addPostForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const payload = {
+                title_vi: document.getElementById('post_title_vi').value,
+                title_en: document.getElementById('post_title_en').value,
+                title_de: document.getElementById('post_title_de').value,
+                content_vi: document.getElementById('post_content_vi').value,
+                content_en: document.getElementById('post_content_en').value,
+                content_de: document.getElementById('post_content_de').value
+            };
+
+            const res = await fetch('/api/admin/add-post', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            const result = await res.json();
+            alert(result.message);
+            document.getElementById('addPostForm').reset();
+            fetchPosts();
+        });
+
+        async function deletePost(id) {
+            if(confirm("Bạn có chắc chắn muốn gỡ vĩnh viễn bài viết này?")) {
+                const res = await fetch(`/api/admin/delete-post/${id}`, { method: 'DELETE' });
+                const r = await res.json();
+                alert(r.message);
+                fetchPosts();
+            }
+        }
+
+        fetchDishes();
+        fetchPosts();
+    </script>
+</body>
+</html>

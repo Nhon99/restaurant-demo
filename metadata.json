@@ -1,0 +1,6 @@
+{
+  "name": "A Béo - Vietnamesische Küche & Sushi",
+  "description": "An elegant, interactive storefront for A Béo - Vietnamesische Küche & Sushi in Hannover. Features a beautifully curated Vietnamese & Sushi menu, shopping cart checkout, table reservations, live location tracking, and an AI dish helper.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
